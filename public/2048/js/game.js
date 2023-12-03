@@ -37,10 +37,10 @@ var Game = (function () {
         _this.view.setup();
       });
     },
-    save: function () {
+    save: async function () {
       console.log("saving");
 
-      fetch("/api/scores", {
+      await fetch("/api/scores", {
         method: "POST",
         body: JSON.stringify({
           score: data.score,
