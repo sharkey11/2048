@@ -45,16 +45,19 @@ export async function POST(request: Request) {
             last_played = EXCLUDED.last_played
         RETURNING username;
       `;
-      console.log(command);
 
       const upsertResponse = await sql(command);
-      let username = upsertResponse?.rows?.[0]?.username;
+      let username = upsertResponse.at(0)?.username;
+      console.log(username)
 
       // If username is not set, make API call and update it
       if (!username) {
         const user = await WhopAPI.me({ headers }).GET("/me", {});
         if (user.isErr) {
-            return console.error("couldn't fetch username")
+            console.error("couldn't fetch username")
+            return new Response(JSON.stringify({}), {
+              status: 400,
+            });
         }
 
 
