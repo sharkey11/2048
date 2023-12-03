@@ -33,3 +33,8 @@ To learn more about how the webhook functions work, head to the [**Webhooks Guid
 You will see in the `lib` folder, there is a file called `iframe.ts`. This sets up a background listener that is required for communication over **Post Message**. This allows you to call the function anywhere in the project and open external URLs.
 
 You can see an example of how to use this in the `OpenButton.tsx` file, where we are opening `google.com` once the button is clicked.
+
+
+## To start the app, run:
+1. `pnpm i`
+2. `pnpm dev`

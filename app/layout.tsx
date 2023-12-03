@@ -9,7 +9,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body style={{backgroundColor: "rgba(238, 228, 218)"}}>
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

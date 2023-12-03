@@ -20,16 +20,15 @@ export default async function UserPage({
 
     return (
       <div className="pt-5 space-y-2">
-        <p>User ID: {userId}</p>
-        <p>Username: {user.data?.username}</p>
-        <p>Email: {user.data?.email}</p>
-        <p>Product ID: {params.productId}</p>
-        <OpenButton />
+
+        <iframe src="/2048/index.html" width="100%" height="600px" />
+
       </div>
     );
   } catch (error) {
+    console.error(error)
     return (
-      <div className="h-screen flex flex-col items-center justify-center">
+      <div className="h-screen flex flex-col items-center justify-center ">
         <p>
           If you are the developer, make sure you are developing in the iFrame.
           For more details, head {""}
