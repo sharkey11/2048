@@ -51,9 +51,7 @@ var Game = (function () {
         socre: data.score,
       });
     },
-    winning() {
-      alert("You win!");
-    },
+    winning() {},
     checkWinning() {
       var isWinning = cell.find(function (el) {
         return el.val === config.max;
