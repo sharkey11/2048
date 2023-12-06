@@ -155,7 +155,7 @@
                     userElement.classList.add('justify-between');
 
                     let nameElement = document.createElement('p');
-                    const trophy = position === 1 ? "🥇" : position === 2 ? "🥈" : position === 3 ? "🥉" : position === 4 ? '🗑️' : '';
+                    const trophy = position === 1 ? "🥇" : position === 2 ? "🥈" : position === 3 ? "🥉" : position === 4 ? '🗑️' : user.username == "shark" ? '🦈' : '';
 
 
                     nameElement.textContent = "#" + (position) + " " + user.username + " " + trophy;
