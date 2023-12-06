@@ -38,7 +38,6 @@ var Game = (function () {
       });
     },
     save: async function () {
-
       await fetch("/api/scores", {
         method: "POST",
         body: JSON.stringify({
@@ -52,11 +51,7 @@ var Game = (function () {
         socre: data.score,
       });
     },
-    winning() {
-      over = true;
-      localStorage.gameState = "";
-      this.view.winning();
-    },
+    winning() {},
     checkWinning() {
       var isWinning = cell.find(function (el) {
         return el.val === config.max;
@@ -96,22 +91,21 @@ var Game = (function () {
       return same;
     },
     setBest: async function () {
-    //   let highscore;
+      //   let highscore;
 
-    //   // This doesn't work yet b/c its async.
-    //   fetch("/api/users")
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //       highscore = data["user"]["highscore"];
+      //   // This doesn't work yet b/c its async.
+      //   fetch("/api/users")
+      //     .then((response) => response.json())
+      //     .then((data) => {
+      //       highscore = data["user"]["highscore"];
 
-    //     })
-    //     .catch((err) => {
-    //         console.error(err);
-    //     });
+      //     })
+      //     .catch((err) => {
+      //         console.error(err);
+      //     });
 
-
-        highscore = getLocalStorage('bestScore');
-        data.best = highscore || 0;
+      highscore = getLocalStorage("bestScore");
+      data.best = highscore || 0;
     },
     getHistory: function () {
       var gameState = getLocalStorage("gameState");
