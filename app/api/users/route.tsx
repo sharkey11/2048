@@ -14,17 +14,12 @@ export async function GET(request: Request) {
   }
 
   const sql = neon(process.env.DATABASE_URL);
-  console.log(`SELECT * FROM users where user_id = '${userId}'`);
-
   const users = await sql(`SELECT highscore FROM users where user_id = $1`, [userId]);
 
-    console.log("nuts")
 
-    console.log(users)
 
   let user = users.at(0);
 
-  console.log(user);
   return new Response(JSON.stringify({ user: user }), {
     status: 200,
   });

@@ -38,7 +38,6 @@ var Game = (function () {
       });
     },
     save: async function () {
-      console.log("saving");
 
       await fetch("/api/scores", {
         method: "POST",
@@ -103,9 +102,7 @@ var Game = (function () {
     //   fetch("/api/users")
     //     .then((response) => response.json())
     //     .then((data) => {
-    //       console.log(data["user"]["highscore"]);
     //       highscore = data["user"]["highscore"];
-    //       console.log("HIGHSCORE: ", highscore);
 
     //     })
     //     .catch((err) => {

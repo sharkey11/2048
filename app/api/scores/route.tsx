@@ -16,63 +16,46 @@ export async function GET(request: Request) {
   const sql = neon(process.env.DATABASE_URL);
 
   const users = await sql`
-    SELECT username, highscore FROM users
+    SELECT user_id, highscore FROM users
     order by highscore desc
     limit 20
   `;
 
+  const usersWithUsernames = await Promise.all(
+    users.map(async (user) => {
+      let response = await WhopAPI.app().GET("/app/users/{id}", {
+        params: { path: { id: user.user_id } },
+        next: { revalidate: 10 * 60 },
+      });
+      return { ...user, username: response.data?.username };
+    })
+  );
 
-  return new Response(JSON.stringify(users), {
+  return new Response(JSON.stringify(usersWithUsernames), {
     status: 200,
   });
 }
 
 export async function POST(request: Request) {
-    let body = await request.json();
-    console.log(body);
-    const { userId } = await validateToken({ headers });
+  let body = await request.json();
+  const { userId } = await validateToken({ headers });
 
-    if (process.env.DATABASE_URL) {
-      const sql = neon(process.env.DATABASE_URL);
+  if (process.env.DATABASE_URL) {
+    const sql = neon(process.env.DATABASE_URL);
 
-      // Upsert a score for this user and return the username
-      const command = `
+    const command = `
         INSERT INTO users (user_id, highscore, last_played)
         VALUES ('${userId}', ${body.score}, '${new Date().toISOString()}')
         ON CONFLICT (user_id)
         DO UPDATE SET
             highscore = GREATEST(users.highscore, EXCLUDED.highscore),
-            last_played = EXCLUDED.last_played
-        RETURNING username;
+            last_played = EXCLUDED.last_played;
       `;
 
-      const upsertResponse = await sql(command);
-      let username = upsertResponse.at(0)?.username;
-      console.log(username)
-
-      // If username is not set, make API call and update it
-      if (!username) {
-        const user = await WhopAPI.me({ headers }).GET("/me", {});
-        if (user.isErr) {
-            console.error("couldn't fetch username")
-            return new Response(JSON.stringify({}), {
-              status: 400,
-            });
-        }
-
-
-        // Update the username in the users table
-        const updateUsernameQuery = `
-          UPDATE users
-          SET username = '${user.data.username}'
-          WHERE user_id = '${userId}'
-        `;
-        console.log(updateUsernameQuery)
-        await sql(updateUsernameQuery);
-      }
-    }
-
-    return new Response(JSON.stringify({ message: "success" }), {
-      status: 200,
-    });
+    await sql(command);
   }
+
+  return new Response(JSON.stringify({ message: "success" }), {
+    status: 200,
+  });
+}
