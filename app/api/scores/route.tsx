@@ -18,7 +18,7 @@ export async function GET(request: Request) {
   const users = await sql`
     SELECT username, highscore FROM users
     order by highscore desc
-    limit 10
+    limit 20
   `;
 
 

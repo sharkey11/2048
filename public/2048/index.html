@@ -17,24 +17,31 @@
             /* display: flex; */
         }
 
+        .btn {
+            border-radius: 8px;
+            outline: none;
+            background-color: rgb(176, 114, 0);
+            color: white;
+            padding: 8px 12px;
+            font-size: 18px;
+        }
+
         .leaderboard {
-            width: 300px;
+            /* width: 300px; */
             font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
             border-radius: 3px;
             color: white    ;
-            /* padding: 50px; */
-            /* margin-right: 200px; */
-            /* bg-yellow-300 mr-16 p-4 */
             background-color: #bbada0;
-            margin-right: 4rem;
             padding: 1rem;
+            z-index: 100;
         }
     </style>
 </head>
 
 <body>
-    <div class = "outer-container d-flex flex flex-row">
-        <div class="container ">
+    <div class = "outer-container d-flex flex gap-8 flex-row px-8">
+        <div class="basis-0" style="flex-grow:1;">
+        <div class="container " >
             <div class="heading">
                 <h1 class="title">
                     <a href="">2048</a>
@@ -101,67 +108,25 @@
                     <p>WINNING</p>
                 </div>
             </div>
-
-        </div>
-        <div class = "leaderboard flex-3 hidden md:block">
-            <h1 class="text-center font-bold underline mb-4">Leaderboard</h1>
-            <div class="flex justify-between">
-            <h1 class="text-left font-light mb-4">Name</h1>
-            <h1 class="text-right font-light mb-4">Score</h1>
-            </div>
-            <div class="leaderboard-container"></div>
-        </div>
-
-            <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    // Existing JavaScript code
-
-                    async function getScores() {
-                        console.log("running", new Date().getTime())
-                        const response = await fetch('/api/scores');
-                        const users = await response.json();
-
-                        let position = 1
-                        let newContainer = document.createElement('div');
-                         newContainer.classList.add('leaderboard-container');
-
-                        for (let user of users) {
-                            let userElement = document.createElement('div');
-                            userElement.classList.add('user');
-                            userElement.classList.add('flex');
-                            userElement.classList.add('justify-between');
-
-                            let nameElement = document.createElement('p');
-                            nameElement.textContent = "#" + (position) + " " + user.username;
-
-                            let scoreElement = document.createElement('p');
-                            scoreElement.textContent = user.highscore;
-                            userElement.appendChild(nameElement);
-                            userElement.appendChild(scoreElement);
-                            newContainer.appendChild(userElement);
-
-                            position += 1
-                        }
-
-                        document.querySelector('.leaderboard-container').replaceWith(newContainer)
-                    }
-
-                    console.log("calling get scores")
-
-                    getScores();
-
-                    // I want this loop to function to only run when the window is on focus
-
-                    setInterval(getScores, 3000);
-
-                    });
-            </script>
-
-
+            <button  onclick="document.getElementById('leaderboard').style.display = 'block'" class="btn md:hidden mt-6">Open Leaderboard</button>
 
 
         </div>
     </div>
+        <div id="leaderboard" class = "hidden md:block leaderboard basis-0 flex-1 fixed md:relative md:mr-16 top-0 left-0 right-0 bottom-0">
+            <h1 class="text-center font-bold underline mb-4">Leaderboard</h1>
+            <div class="flex justify-between">
+                <h1 class="text-left font-light mb-4">Name</h1>
+                <h1 class="text-right font-light mb-4">Score</h1>
+            </div>
+            <div class="leaderboard-container"></div>
+            <button class="btn bg-gray-50 md:hidden w-full mt-6" onclick="document.getElementById('leaderboard').style.display = 'none'">Close</button>
+        </div>
+
+    </div>
+
+
+
     <script src="js/config.js"></script>
     <script src="js/data.js"></script>
     <script src="js/utils.js"></script>
@@ -169,6 +134,55 @@
     <script src="js/view.js"></script>
     <script src="js/game.js"></script>
     <script src="js/main.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Existing JavaScript code
+
+            async function getScores() {
+                const response = await fetch('/api/scores');
+                const users = await response.json();
+
+                let position = 1
+                let newContainer = document.createElement('div');
+                 newContainer.classList.add('leaderboard-container');
+
+
+                for (let user of users) {
+                    let userElement = document.createElement('div');
+                    userElement.classList.add('user');
+                    userElement.classList.add('flex');
+                    userElement.classList.add('justify-between');
+
+                    let nameElement = document.createElement('p');
+                    const trophy = position === 1 ? "🥇" : position === 2 ? "🥈" : position === 3 ? "🥉" : position === 4 ? '🗑️' : '';
+
+
+                    nameElement.textContent = "#" + (position) + " " + user.username + " " + trophy;
+
+                    let scoreElement = document.createElement('p');
+                    scoreElement.textContent = user.highscore;
+                    userElement.appendChild(nameElement);
+                    userElement.appendChild(scoreElement);
+                    newContainer.appendChild(userElement);
+
+                    position += 1
+                }
+
+                document.querySelector('.leaderboard-container').replaceWith(newContainer)
+            }
+
+            getScores();
+
+            // I want this loop to function to only run when the window is on focus
+
+            setInterval(getScores, 3000);
+
+            });
+    </script>
+
 </body>
+
+
 
 </html>

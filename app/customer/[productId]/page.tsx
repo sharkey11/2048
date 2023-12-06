@@ -20,13 +20,15 @@ export default async function UserPage({
 
     return (
       <div className="pt-5 space-y-2">
-
-        <iframe src="/2048/index.html" width="100%" height="600px" />
-
+        <iframe
+          src="/2048/index.html"
+          width="100%"
+          style={{ height: "90vh" }}
+        />
       </div>
     );
   } catch (error) {
-    console.error(error)
+    console.error(error);
     return (
       <div className="h-screen flex flex-col items-center justify-center ">
         <p>
